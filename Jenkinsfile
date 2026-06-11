@@ -9,6 +9,8 @@ pipeline {
     }
 
     environment {
+        DOCKERHUB_USER="amirchaari"
+
         // ── Change to your Docker Hub username ────────────────────────────────
         IMAGE_NAME      = "${DOCKERHUB_USER}/wso2-notifier-frontend"
         DOCKERHUB_CREDS = 'dockerhub'   // credential ID in Jenkins
