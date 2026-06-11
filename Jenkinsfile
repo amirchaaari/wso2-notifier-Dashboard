@@ -20,13 +20,15 @@ pipeline {
 
         // ── 1. Install dependencies and build (the only "build" Jenkins does) ─
         stage('Build') {
-            steps {
-                echo '▶ Installing npm dependencies...'
-                sh 'npm ci'
-                echo '▶ Building React/Vite frontend...'
-                sh 'npm run build'
-                echo '✅ Build complete: dist/ folder ready'
-            }
+           agent {
+        docker {
+            image 'node:20'
+        }
+    }
+    steps {
+        sh 'npm ci'
+        sh 'npm run build'
+    }
         }
 
         // ── 2. Build Docker image (just copies dist/, no Node.js inside) ──────
