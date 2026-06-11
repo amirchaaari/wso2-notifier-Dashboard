@@ -1,9 +1,15 @@
 pipeline {
     agent any
 
+
+    tools {
+     
+        dockerTool 'docker'
+
+    }
+
     environment {
         // ── Change to your Docker Hub username ────────────────────────────────
-        DOCKERHUB_USER  = 'your-dockerhub-username'
         IMAGE_NAME      = "${DOCKERHUB_USER}/wso2-notifier-frontend"
         DOCKERHUB_CREDS = 'dockerhub'   // credential ID in Jenkins
     }
