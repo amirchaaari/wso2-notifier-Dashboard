@@ -17,7 +17,7 @@ const UseCaseCard = ({ rule, onToggle, onEdit }) => {
     <div className="glass-panel" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', height: '100%' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <div style={{ background: 'rgba(255,255,255,0.05)', padding: '0.75rem', borderRadius: '0.75rem', color: rule.enabled ? 'var(--accent-primary)' : 'var(--text-secondary)' }}>
+          <div style={{ background: 'var(--chip-bg)', padding: '0.75rem', borderRadius: '0.75rem', color: rule.enabled ? 'var(--accent-primary)' : 'var(--text-secondary)' }}>
             {config.icon}
           </div>
           <div>

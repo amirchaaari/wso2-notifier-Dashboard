@@ -1,0 +1,8 @@
+node_modules/
+src/
+public/
+*.md
+.git/
+.gitignore
+.env
+.env.*

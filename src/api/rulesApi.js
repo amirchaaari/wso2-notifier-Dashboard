@@ -1,31 +1,18 @@
-import axios from 'axios';
+import axiosInstance from './axiosInstance';
 
-// Ensure this matches your backend Vite CORS port and application running port
-const API_BASE_URL = 'http://localhost:8082/api/rules';
+const BASE = '/api/rules';
 
 export const rulesApi = {
-    getAllRules: async () => {
-        const response = await axios.get(API_BASE_URL);
-        return response.data;
-    },
+    getAllRules:     async ()           => (await axiosInstance.get(BASE)).data,
+    getRuleByType:  async (type)        => (await axiosInstance.get(`${BASE}/${type}`)).data,
+    updateRule:     async (type, data)  => (await axiosInstance.put(`${BASE}/${type}`, data)).data,
+    enableRule:     async (type)        => (await axiosInstance.patch(`${BASE}/${type}/enable`)).data,
+    disableRule:    async (type)        => (await axiosInstance.patch(`${BASE}/${type}/disable`)).data,
 
-    getRuleByType: async (type) => {
-        const response = await axios.get(`${API_BASE_URL}/${type}`);
-        return response.data;
+    exportRules: async () => {
+        const resp = await axiosInstance.get(`${BASE}/export`);
+        return resp.data;
     },
-
-    updateRule: async (type, requestPayload) => {
-        const response = await axios.put(`${API_BASE_URL}/${type}`, requestPayload);
-        return response.data;
-    },
-
-    enableRule: async (type) => {
-        const response = await axios.patch(`${API_BASE_URL}/${type}/enable`);
-        return response.data;
-    },
-
-    disableRule: async (type) => {
-        const response = await axios.patch(`${API_BASE_URL}/${type}/disable`);
-        return response.data;
-    }
+    importRules: async (rules) =>
+        (await axiosInstance.post(`${BASE}/import`, rules)).data,
 };
