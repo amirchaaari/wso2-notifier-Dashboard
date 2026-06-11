@@ -5,7 +5,7 @@ pipeline {
         // ── Change to your Docker Hub username ────────────────────────────────
         DOCKERHUB_USER  = 'your-dockerhub-username'
         IMAGE_NAME      = "${DOCKERHUB_USER}/wso2-notifier-frontend"
-        DOCKERHUB_CREDS = 'dockerhub-creds'   // credential ID in Jenkins
+        DOCKERHUB_CREDS = 'dockerhub'   // credential ID in Jenkins
     }
 
     stages {
