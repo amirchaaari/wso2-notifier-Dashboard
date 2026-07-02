@@ -10,6 +10,9 @@ pipeline {
         DOCKERHUB_USER = "amirchaari"
         IMAGE_NAME = "amirchaari/wso2-notifier-frontend"
         DOCKERHUB_CREDS = 'dockerhub'
+
+        // Force Docker to build for AMD64 so it runs on GKE (same as the backend pipeline)
+        DOCKER_DEFAULT_PLATFORM = 'linux/amd64'
     }
 
     stages {
@@ -30,7 +33,15 @@ pipeline {
             }
         }
 
-        stage('Docker Build & Push') {
+        stage('Docker Build') {
+            steps {
+                echo "▶ Building Docker image ${IMAGE_NAME}:${BUILD_NUMBER} for AMD64..."
+                sh "docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} -t ${IMAGE_NAME}:latest ."
+                echo '✅ Docker image built'
+            }
+        }
+
+        stage('Docker Push') {
             steps {
                 withCredentials([usernamePassword(
                     credentialsId: "${DOCKERHUB_CREDS}",
@@ -38,12 +49,9 @@ pipeline {
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
                     sh 'docker login -u $DOCKER_USER -p $DOCKER_PASS'
-                    // GKE nodes are linux/amd64. Build for that platform explicitly so the
-                    // image runs on the cluster even when the Jenkins agent is arm64.
-                    sh 'docker buildx create --use --name amd64builder || docker buildx use amd64builder'
-                    echo "▶ Building & pushing ${IMAGE_NAME}:${BUILD_NUMBER} (linux/amd64)"
-                    sh "docker buildx build --platform linux/amd64 -t ${IMAGE_NAME}:${BUILD_NUMBER} -t ${IMAGE_NAME}:latest --push ."
-                    echo '✅ Docker image built & pushed'
+                    sh "docker push ${IMAGE_NAME}:${BUILD_NUMBER}"
+                    sh "docker push ${IMAGE_NAME}:latest"
+                    echo "✅ Pushed ${IMAGE_NAME}:${BUILD_NUMBER} to Docker Hub"
                 }
             }
         }
